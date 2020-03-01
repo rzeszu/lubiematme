@@ -1,0 +1,43 @@
+<%= form_with(model: exercise, local: true) do |form| %>
+  <% if exercise.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(exercise.errors.count, "error") %> prohibited this exercise from being saved:</h2>
+
+      <ul>
+      <% exercise.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label "Nazwa" %>
+    <%= form.text_field :name, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label "Opis" %>
+    <%= form.text_field :comment, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label "Kategoria" %>
+    <%= form.collection_select(:category_id, Category.all.order("id ASC"), :id, :name, { prompt: "Wybierz kategorię" }, class: "form-control") %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label "Status" %>
+    <%= form.collection_select(:status_id, Status.all.order("id ASC"), :id, :name, { prompt: "Wybierz status" }, class: "form-control") %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label "Zdjęcie" %>
+    <%= form.file_field :image %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Zapisz", class: "btn btn-primary" %>
+    <%= link_to "Cofnij", exercises_path, class: "btn btn-link" %>
+  </div>
+<% end %>

@@ -1,0 +1,32 @@
+<h1>Zadania</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Nazwa</th>
+      <th scope="col">Kategoria</th>
+      <th scope="col">Status</th>
+      <th scope="col">Komentarze</th>
+      <th scope="col">Akcje</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @exercises.each do |exercise| %>
+      <tr>
+        <th scope="row"><%= exercise.id %></th>
+        <td><%= link_to exercise.name, exercise_path(exercise) %></td>
+        <td><%= exercise.category_id %></td>
+        <td><%= exercise.status_id %></td>
+        <td>3</td>
+        <td>
+          <%= link_to 'Edytuj', edit_exercise_path(exercise), class: "btn btn-primary btn-sm" %>
+          <%= link_to 'Destroy', exercise, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger btn-sm" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Dodaj zadanie', new_exercise_path, class: "btn btn-primary" %>
