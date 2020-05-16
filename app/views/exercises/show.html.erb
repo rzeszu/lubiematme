@@ -16,15 +16,15 @@
 
 <a href="#reply" class="mt-3 btn btn-success">Odpowiedz</a>
 
-<% @comments.each do |comment|  %>
-<div class="card mt-4 <%= user(comment.user_id) %>">
+<% @comments.each_with_index do |comment, i|  %>
+<% if i > 0 && @comments[i-1].user_id != @comments[i].user_id%>
+<div class="timestamp">
+  <%= comment.created_at.in_time_zone('Warsaw').strftime("%d.%m.%Y %H:%M") %>
+</div>
+<% end %>
+<div class="comment <%= user2(comment.user_id) %>">
+<div class="card <%= user(comment.user_id) %>">
   <div class="card-body">
-    <div class="row">
-      <div class="col">
-        <p><b><%= User.find(comment.user_id).email %></b></p>
-      </div>
-      <div class="col text-right"><%= comment.created_at %></div>
-    </div>
     <p><%= comment.content %></p>
     <% if comment.image.attached?  %>
     <div>
@@ -33,29 +33,17 @@
     <% end %>
   </div>
 </div>
+</div>
 <% end %>
 
-<div class="card mt-4" id="reply">
-  <div class="card-body">
-    <h5 class="card-title">Odpowiedź</h5>
-    <%= form_with(model: Comment.new, local: true) do |form| %>
-      <% params[:exercise] = @exercise.id %>
-      <%= form.hidden_field :exercise_id, :value => @exercise.id %>
-      <%= form.hidden_field :user_id, :value => current_user.id %>
-      <div class="form-group">
-        <%= form.label "Opis" %>
-        <%= form.text_field :content, class: "form-control" %>
-      </div>
-      <div class="form-group">
-        <%= form.label "Zdjęcie" %>
-        <%= form.file_field :image %>
-      </div>
-      <div class="actions">
-        <%= form.submit "Wyślij", class: "btn btn-success" %>
-      </div>
-    <% end  %>
-  </div>
+<div class="reply">
+  <%= form_with(model: Comment.new, local: true) do |form| %>
+    <% params[:exercise] = @exercise.id %>
+    <%= form.hidden_field :exercise_id, :value => @exercise.id %>
+    <%= form.hidden_field :user_id, :value => current_user.id %>
+    <%= form.text_field :content, class: "reply-input", placeholder: "Wpisz tekst wiadomości" %>
+    <%= form.label "Zdjęcie" %>
+    <%= form.file_field :image %>
+    <%= form.submit "Wyślij", class: "btn btn-success" %>
+  <% end %>
 </div>
-
-<%= link_to 'Edit', edit_exercise_path(@exercise) %> |
-<%= link_to 'Back', exercises_path %>
